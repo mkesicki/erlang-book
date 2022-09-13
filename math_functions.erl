@@ -25,7 +25,7 @@ acc_evens_odds([H|T], Odds, Evens) ->
        0 -> acc_evens_odds(T, Odds, [H|Evens])
    end;
 
-acc_evens_odds([], Evens, Odds) -> {Evens, Odds}.
+acc_evens_odds([], Odds, Evens) -> {Odds, Evens}.
 
 split2(L) ->
 
