@@ -5,7 +5,8 @@ even(X) -> X rem 2 == 0.
 
 odd(X) -> X rem 2 /= 0.
 
-filter(F, []) -> [];
+filter(_, []) -> [];
+
 filter(F,L) when is_function(F) ->
 
     [Head | Tail] = L,
@@ -18,14 +19,14 @@ filter(F,L) when is_function(F) ->
 
 split(L) -> acc_evens_odds(L, [], []).
 
-acc_evens_odds([H|T], Odds, Evens) ->
+acc_evens_odds([H|T], Evens, Odds) ->
 
    case (H rem 2) of
-       1 -> acc_evens_odds(T, [H|Odds], Evens);
-       0 -> acc_evens_odds(T, Odds, [H|Evens])
+       1 -> acc_evens_odds(T, Evens, [H|Odds]);
+       0 -> acc_evens_odds(T,  [H|Evens], Odds)
    end;
 
-acc_evens_odds([], Odds, Evens) -> {Odds, Evens}.
+acc_evens_odds([], Evens, Odds) -> {Evens, Odds}.
 
 split2(L) ->
 
