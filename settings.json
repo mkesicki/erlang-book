@@ -1,0 +1,17 @@
+{
+    "settings": {
+        "env": "dev",
+        "threads":10,
+        "port":8080
+    },
+    "database": {
+        "url": "localhost",
+        "driver": "mysql",
+        "port": 3306
+    },
+    "cache": {
+        "url": "mcache",
+        "driver": "aws",
+        "port": 6500
+    }
+}
