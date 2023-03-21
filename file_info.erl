@@ -2,9 +2,7 @@
 -export([compare/1, checksum/1, checksum2/1, find/1]).
 -include_lib("kernel/include/file.hrl").
 
-% -define(BLOCKSIZE, 32768).
 -define(BLOCKSIZE, 10485760).
-
 
 % https://github.com/everpeace/programming-erlang-code/blob/master/code/lib_md5.erl
 
@@ -25,8 +23,6 @@ checksum(File) ->
         Hash = erlang:md5(Data),
         binary:encode_hex(Hash).
 
-
-
 process_lines(F, Context) ->
     case file:read(F, ?BLOCKSIZE) of
 
@@ -36,7 +32,6 @@ process_lines(F, Context) ->
             process_lines(F, NewContext);
 
         eof ->
-
             file:close(F),
             Hash = erlang:md5_final(Context),
             binary:encode_hex(Hash)
@@ -47,24 +42,21 @@ checksum2(File) ->
     process_lines(F, erlang:md5_init()).
 
 hash([], _, Duplicates) ->
-
      io:format("Found duplicates: ~p~n", [Duplicates]);
-    % Duplicates;
+
 hash(Files, Hashes, Duplicates) ->
 
     [File | T ] = Files,
     A = binary_to_list(checksum(File)),
     NewHashes = lists:append([A], Hashes),
-        %  lists:append([{A, File}], Hashes),
+    io:format("Processing file: ~p~n", [File]),
 
-         io:format("Processing file: ~p~n", [File]),
-
-        case lists:member(A, Hashes) of
-            true ->
-                NewDuplicates = lists:append([{A, File}], Duplicates);
-            false ->
-                NewDuplicates = Duplicates
-        end,
+    case lists:member(A, Hashes) of
+        true ->
+            NewDuplicates = lists:append([{A, File}], Duplicates);
+        false ->
+            NewDuplicates = Duplicates
+    end,
 
     hash(T, NewHashes, NewDuplicates).
 
